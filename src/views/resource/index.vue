@@ -1,5 +1,5 @@
 <template>
-    <div class="role">广告位管理</div>
+    <div class="role">资源列表</div>
 </template>
 
 <script>

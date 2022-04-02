@@ -1,5 +1,5 @@
 <template>
-    <div class="course">广告位管理</div>
+    <div class="course">课程管理</div>
 </template>
 
 <script>

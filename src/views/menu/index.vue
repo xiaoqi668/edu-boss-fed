@@ -1,5 +1,5 @@
 <template>
-    <div class="menu">广告位管理</div>
+    <div class="menu">菜单列表</div>
 </template>
 
 <script>

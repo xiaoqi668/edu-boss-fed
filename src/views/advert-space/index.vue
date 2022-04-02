@@ -1,5 +1,5 @@
 <template>
-    <div class="adcert-space">广告位管理</div>
+    <div class="adcert-space">广告位列表</div>
 </template>
 
 <script>
