@@ -37,7 +37,7 @@ request.interceptors.request.use(function (config) {
   return config
 })
 
-// 封装页面跳转方法
+// 封装页面跳转方法（跳转登录页）
 function redirectLogin () {
   router.push({
     name: 'login',
@@ -48,10 +48,15 @@ function redirectLogin () {
   })
 }
 
+// 存储是否正在更新token的状态，一个refresh_token只能使用一次，需要中间值做判断
+let isRefreshing = false
+// 存储因为token刷新而挂起的请求
+let requests = []
+
 // 设置响应拦截器
 request.interceptors.response.use(function (response) {
   // 状态码2xx会执行这里的逻辑，也就是成功会执行这里
-  console.log('响应成功了：', response)
+  // console.log('响应成功了：', response)
   return response
 }, function (error) {
   // 状态码4xx会执行这里的逻辑，也就是失败会执行这里
@@ -68,7 +73,19 @@ request.interceptors.response.use(function (response) {
         redirectLogin()
         return Promise.reject(error)
       }
-      // 有token信息，token过期重新发送请求
+
+      // 检测是否已经存在正在刷新token的请求
+      if (isRefreshing) {
+        // 已有刷新token的请求在发送，不能再发送同一个请求
+        // 将当前失败的请求存储到数组中
+        requests.push(() => {
+          request(error.config)
+        })
+        return
+      }
+      // 没有正在刷新的token，可以刷新且将isRefreshing变为ture
+      isRefreshing = true
+      // 有token信息，但是token无效或token过期，重新发送请求，获取新的access_token
       return request({
         method: 'POST',
         url: '/front/user/refresh_token',
@@ -85,12 +102,20 @@ request.interceptors.response.use(function (response) {
           redirectLogin()
           return Promise.reject(error)
         }
-        // 刷新token成功
+        // 刷新token成功,存储新的token
         store.commit('setUser', res.data.content)
         // 重新发送失败的请求 config为本次发送失败请求的配置信息
+        // 根据requests发送多次请求
+        requests.forEach(callback => callback())
+        // 发送完毕，清除requests
+        requests = []
+        // 将本次请求发送
         return request(error.config)
       }).catch(err => {
         console.log(err)
+      }).finally(() => {
+        // 请求发送完毕，相应处理完毕，将isRefreshing改为false
+        isRefreshing = false
       })
     } else if (status === 403) {
       errorMessage = '没有权限，请联系管理员'

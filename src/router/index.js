@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-//引入store
+// 引入store
 import store from '@/store'
 // 引入路由中需要使用的组件功能
 // import Login from '@/views/login/index'
@@ -25,7 +25,7 @@ const routes = [
   {
     path: '/',
     component: () => import('@/views/layout/index'),
-    //直接给某个路由设置，这时内部的子路由都需要验证（包含当前路由）
+    // 直接给某个路由设置，这时内部的子路由都需要验证（包含当前路由）
     meta: {
       requiresAuth: true
     },
@@ -69,6 +69,11 @@ const routes = [
         path: '/advert-space',
         name: 'advert-space',
         component: () => import('@/views/advert-space/index')
+      },
+      {
+        path: '/menu/create',
+        name: 'menu-create',
+        component: () => import('@/views/menu/menuCreate')
       }
     ]
   },
@@ -83,21 +88,21 @@ const router = new VueRouter({
   routes
 })
 
-//导航守卫，在路由跳转之前进行功能设置
+// 导航守卫，在路由跳转之前进行功能设置
 router.beforeEach((to, from, next) => {
-  //验证to路由是否需要身份验证
+  // 验证to路由是否需要身份验证
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    //验证Vuex中的store中的登陆用户信息是否存储
-    if(!store.state.user){
-      return next({ 
+    // 验证Vuex中的store中的登陆用户信息是否存储
+    if (!store.state.user) {
+      return next({
         name: 'login',
         query: {
-          //将本次路由的fullpath传递给login页面
+          // 将本次路由的fullpath传递给login页面
           redirect: to.fullPath
         }
       })
     }
-    //已经登陆 允许通过
+    // 已经登陆 允许通过
     next()
   } else {
     next()

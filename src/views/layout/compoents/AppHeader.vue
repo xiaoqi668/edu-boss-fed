@@ -28,57 +28,58 @@
 </template>
 
 <script>
-//引入用户信息接口功能
-import { getUserInfo } from "@/services/user";
+// 引入用户信息接口功能
+import { getUserInfo } from '@/services/user'
 export default {
-  name: "AppHeader",
-  created() {
-    //加载用户信息，最好不要在生命周期钩子中直接使用逻辑,避免过多逻辑，增加可维护性
-    this.loadUserInfo();
+  name: 'AppHeader',
+  created () {
+    // 加载用户信息，最好不要在生命周期钩子中直接使用逻辑,避免过多逻辑，增加可维护性
+    this.loadUserInfo()
+    this.loadUserInfo()
   },
-  data() {
+  data () {
     return {
-      //用户信息
+      // 用户信息
       userInfo: {}
-    };
+    }
   },
   methods: {
-    //加载用户信息功能
-    async loadUserInfo() {
-      const { data } = await getUserInfo();
-      this.userInfo = data.content;
+    // 加载用户信息功能
+    async loadUserInfo () {
+      const { data } = await getUserInfo()
+      this.userInfo = data.content
     },
     // loadUserInfo() {
     //   getUserInfo().then(data => {
     //     console.log(data)
     //   })
     // }
-    //退出功能
-    handleLogout() {
-      this.$confirm("确认退出吗？", "退出提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+    // 退出功能
+    handleLogout () {
+      this.$confirm('确认退出吗？', '退出提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(() => {
-          //1.清除store中的用户信息
-          this.$store.commit("setUser", null);
-          //2.跳转login页面
-          this.$router.push("/login");
+          // 1.清除store中的用户信息
+          this.$store.commit('setUser', null)
+          // 2.跳转login页面
+          this.$router.push('/login')
           this.$message({
-            type: "success",
-            message: "退出成功!"
-          });
+            type: 'success',
+            message: '退出成功!'
+          })
         })
         .catch(() => {
           this.$message({
-            type: "info",
-            message: "已取消退出"
-          });
-        });
+            type: 'info',
+            message: '已取消退出'
+          })
+        })
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
