@@ -74,6 +74,17 @@ const routes = [
         path: '/menu/create',
         name: 'menu-create',
         component: () => import('@/views/menu/menuCreate')
+      },
+      {
+        path: '/menu/:id/edit',
+        name: 'menu-edit',
+        component: () => import('@/views/menu/edit')
+      },
+      {
+        path: '/role/:roleId/alloc-menu',
+        name: 'alloc-menu',
+        component: () => import(/* webpackChunkName: 'alloc-menu' */'@/views/role/alloc-menu'),
+        props: true
       }
     ]
   },

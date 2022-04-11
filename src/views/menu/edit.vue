@@ -1,15 +1,13 @@
 <template>
-  <div class="menu-create">
-    <create-or-edit></create-or-edit>
+  <div class="menu-edit">
+    <create-or-edit :is-edit="true"></create-or-edit>
   </div>
 </template>
 
 <script>
-// 获取一级菜单接口与//更新菜单接口
 import CreateOrEdit from './components/CreateOrEdit'
-
 export default {
-  name: 'MenuCreate',
+  name: 'MenuEdit',
   components: {
     CreateOrEdit
   }
